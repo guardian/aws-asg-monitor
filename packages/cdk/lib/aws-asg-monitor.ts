@@ -2,7 +2,8 @@ import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import { GuStack } from '@guardian/cdk/lib/constructs/core';
 import { GuLambdaFunction } from '@guardian/cdk/lib/constructs/lambda';
 import type { App } from 'aws-cdk-lib';
-import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
+import { Duration } from 'aws-cdk-lib';
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 export class AwsAsgMonitor extends GuStack {
@@ -40,15 +41,43 @@ export class AwsAsgMonitor extends GuStack {
 			 * Should align with `.nvmrc` at the root of the repository.
 			 */
 			runtime: Runtime.NODEJS_20_X,
+
+			/**
+			 * Allow the lambda to run for the maximum time.
+			 */
+			timeout: Duration.minutes(15),
+
+			/**
+			 * Allow the lambda to use up to 1GB of memory.
+			 */
+			memorySize: 1024,
 		});
 
-		// See https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AutoScalingReadOnlyAccess.html
-		lambda.role?.addManagedPolicy(
-			ManagedPolicy.fromManagedPolicyArn(
-				this,
-				'AutoScalingReadOnlyAccess',
-				'arn:aws:iam::aws:policy/AutoScalingReadOnlyAccess',
-			),
+		/*
+			A bit of a hack... this role is used by Service Catalogue,
+			and has read access to all our accounts.
+
+			Yes, we are not following the principle of least privilege,
+			but this repository isn't meant to be running for very long...
+
+			See https://github.com/guardian/aws-account-setup/blob/main/packages/cdk/lib/constructs/cloudquery-role.ts.
+
+			TODO provision a dedicated role for this service.
+			 */
+		lambda.addToRolePolicy(
+			new PolicyStatement({
+				effect: Effect.ALLOW,
+				resources: [`arn:aws:iam::*:role/cloudquery-access`],
+				actions: ['sts:AssumeRole'],
+			}),
+		);
+
+		lambda.addToRolePolicy(
+			new PolicyStatement({
+				effect: Effect.ALLOW,
+				resources: ['*'],
+				actions: ['organizations:List*'],
+			}),
 		);
 	}
 }

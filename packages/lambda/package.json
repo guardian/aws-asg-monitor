@@ -15,6 +15,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-auto-scaling": "^3.477.0",
-    "@aws-sdk/credential-providers": "^3.477.0"
+    "@aws-sdk/client-organizations": "^3.477.0",
+    "@aws-sdk/credential-providers": "^3.477.0",
+    "@smithy/util-retry": "^2.0.8"
   }
 }
