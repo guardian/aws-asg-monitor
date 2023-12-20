@@ -2,14 +2,19 @@
   "name": "lambda",
   "version": "0.0.0",
   "scripts": {
-    "test": "jest --detectOpenHandles --config ../../jest.config.js --selectProjects lambda",
+    "test": "jest --detectOpenHandles --config ../../jest.config.js --selectProjects lambda --passWithNoTests",
     "start": "DOTENV_CONFIG_PATH=.env ts-node src/run-locally.ts",
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outdir=dist",
     "postbuild": "cd dist && zip -r aws-asg-monitor.zip ."
   },
   "devDependencies": {
+    "@smithy/types": "^2.7.0",
     "dotenv": "^16.3.1",
     "esbuild": "^0.19.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-auto-scaling": "^3.477.0",
+    "@aws-sdk/credential-providers": "^3.477.0"
   }
 }

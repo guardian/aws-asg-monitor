@@ -98,6 +98,7 @@ exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
               ],
             ],
           },
+          "arn:aws:iam::aws:policy/AutoScalingReadOnlyAccess",
         ],
         "Tags": [
           {
