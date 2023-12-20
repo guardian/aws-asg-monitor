@@ -2,6 +2,7 @@ import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import { GuStack } from '@guardian/cdk/lib/constructs/core';
 import { GuLambdaFunction } from '@guardian/cdk/lib/constructs/lambda';
 import type { App } from 'aws-cdk-lib';
+import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 export class AwsAsgMonitor extends GuStack {
@@ -15,7 +16,7 @@ export class AwsAsgMonitor extends GuStack {
 		 *
 		 * @see The `__snapshots__` directory for more.
 		 */
-		new GuLambdaFunction(this, 'AwsAsgMonitor', {
+		const lambda = new GuLambdaFunction(this, 'AwsAsgMonitor', {
 			/**
 			 * This becomes the value of the APP tag on provisioned resources.
 			 */
@@ -40,5 +41,14 @@ export class AwsAsgMonitor extends GuStack {
 			 */
 			runtime: Runtime.NODEJS_20_X,
 		});
+
+		// See https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AutoScalingReadOnlyAccess.html
+		lambda.role?.addManagedPolicy(
+			ManagedPolicy.fromManagedPolicyArn(
+				this,
+				'AutoScalingReadOnlyAccess',
+				'arn:aws:iam::aws:policy/AutoScalingReadOnlyAccess',
+			),
+		);
 	}
 }
