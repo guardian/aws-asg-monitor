@@ -12,8 +12,9 @@ A scheduled lambda, running once a day, that will:
 4. Log the activity history in a structured way so that it can be queried in Central ELK
 
 > [!NOTE]
-> The lambda collects all available activity.
-> That is each invocation will produce duplicate log lines.
+> The lambda collects all available activity per run.
+> That is each invocation will produce duplicate log lines,
+> therefore the lambda is run once a day.
 
 With the logs appearing in Central ELK, 
 we can now see how many instances failed 
