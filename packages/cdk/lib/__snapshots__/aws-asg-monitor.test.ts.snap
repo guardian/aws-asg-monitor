@@ -37,7 +37,7 @@ exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
           },
         },
         "Handler": "index.main",
-        "MemorySize": 512,
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "AwsAsgMonitorServiceRole5F798240",
@@ -67,7 +67,7 @@ exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
             "Value": "INFRA",
           },
         ],
-        "Timeout": 30,
+        "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
@@ -98,7 +98,6 @@ exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
               ],
             ],
           },
-          "arn:aws:iam::aws:policy/AutoScalingReadOnlyAccess",
         ],
         "Tags": [
           {
@@ -204,6 +203,16 @@ exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
                   ],
                 ],
               },
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/cloudquery-access",
+            },
+            {
+              "Action": "organizations:List*",
+              "Effect": "Allow",
+              "Resource": "*",
             },
           ],
           "Version": "2012-10-17",

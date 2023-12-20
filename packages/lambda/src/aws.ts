@@ -7,15 +7,22 @@ import {
 	DescribeScalingActivitiesCommand,
 	paginateDescribeAutoScalingGroups,
 } from '@aws-sdk/client-auto-scaling';
+import type { Account } from '@aws-sdk/client-organizations';
+import {
+	OrganizationsClient,
+	paginateListAccounts,
+} from '@aws-sdk/client-organizations';
 import {
 	fromIni,
 	fromTemporaryCredentials,
 } from '@aws-sdk/credential-providers';
 import type { AwsCredentialIdentityProvider } from '@smithy/types';
+import { StandardRetryStrategy } from '@smithy/util-retry';
 
 interface AwsClientConfig {
 	region: string;
 	credentials?: AwsCredentialIdentityProvider;
+	retryStrategy: StandardRetryStrategy;
 }
 
 export function awsClientConfig(
@@ -24,6 +31,8 @@ export function awsClientConfig(
 	region = 'eu-west-1',
 ): AwsClientConfig {
 	return {
+		retryStrategy: new StandardRetryStrategy(5),
+
 		region,
 
 		/*
@@ -47,6 +56,28 @@ export function awsClientConfig(
 				}),
 			}),
 	};
+}
+
+export async function getAwsAccounts(stage: string): Promise<Account[]> {
+	const client = new OrganizationsClient(awsClientConfig(stage));
+
+	const accounts: Account[] = [];
+
+	for await (const page of paginateListAccounts(
+		{
+			client,
+			pageSize: 20,
+		},
+		{},
+	)) {
+		accounts.push(...(page.Accounts ?? []));
+	}
+
+	const rootAccount = 'Guardian Web Systems';
+
+	return accounts
+		.filter((_) => _.Status === 'ACTIVE') // Only query active accounts
+		.filter((_) => _.Name !== rootAccount); // Role to assume when querying account doesn't exist for the root account
 }
 
 export async function listAutoScalingGroups(
