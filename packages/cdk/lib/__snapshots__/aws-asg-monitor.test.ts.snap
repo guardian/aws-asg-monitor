@@ -5,7 +5,7 @@ exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
   "Metadata": {
     "gu:cdk:constructs": [
       "GuDistributionBucketParameter",
-      "GuLambdaFunction",
+      "GuScheduledLambda",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -70,6 +70,43 @@ exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "AwsAsgMonitorAwsAsgMonitorrate1day08837BDC4": {
+      "Properties": {
+        "ScheduleExpression": "rate(1 day)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "AwsAsgMonitor8BB96673",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "AwsAsgMonitorAwsAsgMonitorrate1day0AllowEventRuleAwsAsgMonitor7137BFF3DF561CF7": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AwsAsgMonitor8BB96673",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "AwsAsgMonitorAwsAsgMonitorrate1day08837BDC4",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "AwsAsgMonitorServiceRole5F798240": {
       "Properties": {
