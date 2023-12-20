@@ -1,15 +1,16 @@
 import 'source-map-support/register';
-import { GuRootExperimental } from '@guardian/cdk/lib/experimental/constructs';
-import { ExampleTypescriptLambda } from '../lib/example-typescript-lambda';
+
+import { GuRoot } from '@guardian/cdk/lib/constructs/root';
+import { AwsAsgMonitor } from '../lib/aws-asg-monitor';
 
 /**
  * GuRootExperimental will generate a `riff-raff.yaml` configuration file to deploy this project with Riff-Raff.
  *
  * @see https://github.com/guardian/cdk/blob/main/src/experimental/riff-raff-yaml-file/README.md
  */
-const app = new GuRootExperimental();
+const app = new GuRoot();
 
-new ExampleTypescriptLambda(app, 'ExampleTypescriptLambda-PROD', {
+new AwsAsgMonitor(app, 'AwsAsgMonitor', {
 	/**
 	 * This becomes the value of the STACK tag on provisioned resources.
 	 *
@@ -17,12 +18,12 @@ new ExampleTypescriptLambda(app, 'ExampleTypescriptLambda-PROD', {
 	 *
 	 * @see https://riffraff.gutools.co.uk/deployinfo/data?key=credentials%3Aaws-cfn-role
 	 */
-	stack: 'playground',
+	stack: 'deploy',
 
 	/**
 	 * This becomes the value of the STAGE tag on provisioned resources.
 	 */
-	stage: 'PROD',
+	stage: 'INFRA',
 
 	env: {
 		/**

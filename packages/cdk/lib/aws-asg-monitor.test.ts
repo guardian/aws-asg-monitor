@@ -1,13 +1,13 @@
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
-import { ExampleTypescriptLambda } from './example-typescript-lambda';
+import { AwsAsgMonitor } from './aws-asg-monitor';
 
-describe('The ExampleTypescriptLambda stack', () => {
+describe('The AwsAsgMonitor stack', () => {
 	it('matches the snapshot', () => {
 		const app = new App();
-		const stack = new ExampleTypescriptLambda(app, 'ExampleTypescriptLambda', {
-			stack: 'playground',
-			stage: 'TEST',
+		const stack = new AwsAsgMonitor(app, 'AwsAsgMonitor', {
+			stack: 'deploy',
+			stage: 'INFRA',
 			env: {
 				region: 'eu-west-1',
 			},

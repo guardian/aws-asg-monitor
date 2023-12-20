@@ -9,7 +9,7 @@ on:
 
   push:
     branches:
-      - example-typescript-lambda
+      - main
 
 # Ensure we only ever have one build running at a time.
 # If we push twice in quick succession, the first build will be stopped once the second starts.
@@ -27,11 +27,12 @@ jobs:
       # required by aws-actions/configure-aws-credentials
       id-token: write
       contents: read
+      pull-requests: write # Required by guardian/actions-riff-raff@v3
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
@@ -53,19 +54,21 @@ jobs:
 
       # Setup AWS credentials to enable uploading to S3 for Riff-Raff.
       # See https://github.com/aws-actions/configure-aws-credentials
-      - uses: aws-actions/configure-aws-credentials@v3
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
 
       # See https://github.com/guardian/actions-riff-raff
       - name: Upload to riff-raff
-        uses: guardian/actions-riff-raff@v2
+        uses: guardian/actions-riff-raff@v3
         with:
-          projectName: playground::example-typescript-lambda
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          commentingStage: INFRA
+          projectName: tools::aws-asg-monitor
           configPath: packages/cdk/cdk.out/riff-raff.yaml
           contentDirectories: |
             cdk.out:
               - packages/cdk/cdk.out
-            example-typescript-lambda:
-              - packages/lambda/dist/example-typescript-lambda.zip
+            aws-asg-monitor:
+              - packages/lambda/dist/aws-asg-monitor.zip

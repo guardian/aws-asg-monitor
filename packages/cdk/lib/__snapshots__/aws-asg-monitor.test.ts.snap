@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The ExampleTypescriptLambda stack matches the snapshot 1`] = `
+exports[`The AwsAsgMonitor stack matches the snapshot 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
@@ -17,38 +17,38 @@ exports[`The ExampleTypescriptLambda stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
-    "ExampleTypescriptLambda948FA3B0": {
+    "AwsAsgMonitor8BB96673": {
       "DependsOn": [
-        "ExampleTypescriptLambdaServiceRoleDefaultPolicy8B3129CD",
-        "ExampleTypescriptLambdaServiceRoleFE8EC8A1",
+        "AwsAsgMonitorServiceRoleDefaultPolicy1592F363",
+        "AwsAsgMonitorServiceRole5F798240",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "playground/TEST/example-typescript-lambda/example-typescript-lambda.zip",
+          "S3Key": "deploy/INFRA/aws-asg-monitor/aws-asg-monitor.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "example-typescript-lambda",
-            "STACK": "playground",
-            "STAGE": "TEST",
+            "APP": "aws-asg-monitor",
+            "STACK": "deploy",
+            "STAGE": "INFRA",
           },
         },
         "Handler": "index.main",
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
-            "ExampleTypescriptLambdaServiceRoleFE8EC8A1",
+            "AwsAsgMonitorServiceRole5F798240",
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Tags": [
           {
             "Key": "App",
-            "Value": "example-typescript-lambda",
+            "Value": "aws-asg-monitor",
           },
           {
             "Key": "gu:cdk:version",
@@ -56,22 +56,75 @@ exports[`The ExampleTypescriptLambda stack matches the snapshot 1`] = `
           },
           {
             "Key": "gu:repo",
-            "Value": "guardian/examples",
+            "Value": "guardian/aws-asg-monitor",
           },
           {
             "Key": "Stack",
-            "Value": "playground",
+            "Value": "deploy",
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "INFRA",
           },
         ],
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ExampleTypescriptLambdaServiceRoleDefaultPolicy8B3129CD": {
+    "AwsAsgMonitorServiceRole5F798240": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "aws-asg-monitor",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/aws-asg-monitor",
+          },
+          {
+            "Key": "Stack",
+            "Value": "deploy",
+          },
+          {
+            "Key": "Stage",
+            "Value": "INFRA",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AwsAsgMonitorServiceRoleDefaultPolicy1592F363": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -110,7 +163,7 @@ exports[`The ExampleTypescriptLambda stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/playground/TEST/example-typescript-lambda/example-typescript-lambda.zip",
+                      "/deploy/INFRA/aws-asg-monitor/aws-asg-monitor.zip",
                     ],
                   ],
                 },
@@ -127,7 +180,7 @@ exports[`The ExampleTypescriptLambda stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/playground/example-typescript-lambda",
+                    ":parameter/INFRA/deploy/aws-asg-monitor",
                   ],
                 ],
               },
@@ -146,7 +199,7 @@ exports[`The ExampleTypescriptLambda stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/playground/example-typescript-lambda/*",
+                    ":parameter/INFRA/deploy/aws-asg-monitor/*",
                   ],
                 ],
               },
@@ -154,67 +207,14 @@ exports[`The ExampleTypescriptLambda stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ExampleTypescriptLambdaServiceRoleDefaultPolicy8B3129CD",
+        "PolicyName": "AwsAsgMonitorServiceRoleDefaultPolicy1592F363",
         "Roles": [
           {
-            "Ref": "ExampleTypescriptLambdaServiceRoleFE8EC8A1",
+            "Ref": "AwsAsgMonitorServiceRole5F798240",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "ExampleTypescriptLambdaServiceRoleFE8EC8A1": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "example-typescript-lambda",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/examples",
-          },
-          {
-            "Key": "Stack",
-            "Value": "playground",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
     },
   },
 }
