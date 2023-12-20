@@ -1,8 +1,12 @@
 import type {
+	Activity,
 	AutoScalingClient,
 	AutoScalingGroup,
 } from '@aws-sdk/client-auto-scaling';
-import { paginateDescribeAutoScalingGroups } from '@aws-sdk/client-auto-scaling';
+import {
+	DescribeScalingActivitiesCommand,
+	paginateDescribeAutoScalingGroups,
+} from '@aws-sdk/client-auto-scaling';
 import {
 	fromIni,
 	fromTemporaryCredentials,
@@ -58,4 +62,15 @@ export async function listAutoScalingGroups(
 	}
 
 	return autoScalingGroups;
+}
+
+export async function getActivities(
+	client: AutoScalingClient,
+	asgName: string,
+): Promise<Activity[]> {
+	const command = new DescribeScalingActivitiesCommand({
+		AutoScalingGroupName: asgName,
+	});
+	const { Activities } = await client.send(command);
+	return Activities ?? [];
 }
