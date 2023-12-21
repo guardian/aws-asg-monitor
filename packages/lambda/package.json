@@ -11,7 +11,7 @@
   "devDependencies": {
     "@smithy/types": "^2.7.0",
     "dotenv": "^16.3.1",
-    "esbuild": "^0.19.2"
+    "esbuild": "^0.19.10"
   },
   "dependencies": {
     "@aws-sdk/client-auto-scaling": "^3.478.0",
