@@ -2,6 +2,7 @@
 > This project is not intended to be long-lived!
 > It's a temporary solution to help us identify any common issues with auto-scaling groups.
 > Questions? Talk with https://github.com/orgs/guardian/teams/dotcom-platform or https://github.com/akash1810.
+> Indeed, as of 15 Jan 2024, the infrastructure has been torn down, and this repository archived.
 
 # AWS ASG Monitor
 
